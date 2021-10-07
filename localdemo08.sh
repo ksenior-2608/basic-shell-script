@@ -39,4 +39,61 @@ do
  ((times--))
 done
 
+echo 'File contents after appending:'
+
 cat ${file}
+
+# Redirect STDIN using File Descriptor
+
+read input 0< ${file}
+
+echo "Input var contains(using FD): "
+
+echo "${input}"
+
+# Redirect STDOUT using FD
+
+head -n3 /etc/passwd 1> ${file}
+
+echo "File Contents(using FD):"
+
+cat ${file}
+
+# Redirect STDERR to separate file
+
+err_file="/tmp/data.err"
+
+head -n3 /etc/passwd /fakefile 2> ${err_file}
+
+echo 'Error file Contents:'
+
+cat ${err_file}
+
+# Redirect STDOUT and STDERR to separate files 
+
+head -n3 /etc/passwd /fakefile 1> ${file} 2> ${err_file} 
+
+echo 'Output file contents:'
+
+cat ${file}
+
+echo 'Error file contents:'
+
+cat ${err_file}
+
+# Redirect STDIN and STDOUT to same file
+
+both_file="/tmp/both"
+
+head -n3 /etc/passwd /fakefile &> ${both_file}
+
+echo 'Both file Contents:'
+
+cat ${both_file}
+
+# Discard STDERR
+
+head -n3 /etc/passwd /fakefile 2> /dev/null
+
+echo "Exit Status: ${?}"
+
